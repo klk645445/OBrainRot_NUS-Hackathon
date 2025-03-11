@@ -18,13 +18,14 @@ def audio(text_file_path, file_path="audio/output.wav", speaker_wav="assets/trum
 ## Converting audio to 16khz, 16 bit and mono so that we can represent them during force alignment
 def convert_audio(input_path, output_path):
     command = [
-        'ffmpeg',
+        '/opt/homebrew/bin/ffmpeg',
+        '-y',
         '-i', input_path,  # Input file
         '-ac', '1',  # Set number of audio channels to 1 (mono)
         '-ar', '16000',  # Set audio sampling rate to 16kHz
         '-sample_fmt', 's16',  # Set sample forymat to 16-bit
         output_path  # Output file
     ]
-    subprocess.run(command, check=True)
+    subprocess.call(command)
     print("AUDIO CONVERSION DONE!")
 

@@ -1,0 +1,681 @@
+Lecture Notes in 
+Computer Science 
+Edited by G. Goos and J. Hartmanis 
+474 
+D. Karagiannis (Ed.) 
+Information Systems and 
+Artificial Intelligence: 
+Integration Aspects 
+First Workshop 
+Ulm, FRG, March 19-21, 1990 
+Proceedings 
+Springer-Verlag 
+Berlin Heidelberg New York London 
+Paris Tokyo Hong Kong Barcelona 
+Contents 
+Preface III 
+S. Böttcher 
+A Semantics for the Integration of Database Modifications 
+and Transaction Brackets into a Logic Programming Language 1 
+G. B r e w k a 
+Handling Incomplete Knowledge in Artif icial Intelligence 11 
+F . B r y 
+Negation in Logic Programming: 
+A Formalization in Constructive Logic 30 
+G. G a r z 
+Database Support for Knowledge Representation ? 47 
+D . H o v e k a m p , M . Sand fuchs 
+A K B M S for B A B Y L O N 62 
+T. L u d w i g , B . W a l t e r 
+Database Concepts for the Support of Knowledge-Based Systems 87 
+R. M a n t h e y 
+'Integrity and Recursion: 
+Two Key Issues for Deductive Databases 104 
+JV. M a t t o s 
+A n Approach to DBS-Based Knowledge Management 127 
+J . M y l o p o u l o s , M . B r o d i e 
+Knowledge Bases and Databases: 
+Current Trends and Future Directions 153 
+B . Nebel, C. P e l t a s o n 
+Terminological Reasoning and Information Management . . . . . . . . . . 181 
+G. Saake 
+Conceptual Modeling of Database Applications 213 
+H . T h o m a 
+Information Analysis: 
+A Step-by-Step Clarification of Knowledge and Requirements 233 
+A . Voß 
+Model-Based Knowledge Acquisition 256 
+X 
+H . T h o m a ( P a n e l C h a i r ) 
+Practical Experiences — A Panel Session 273 
+ff.-P. H o i d n 
+Practical Experiences in Coupling Knowledge Base 
+and Database in a Productive Environment 274 
+JV. M a t t o s 
+Performance Measurements and Analyses of 
+Coupling Approaches of Database and Expert Systems and 
+Consequences to Their Integration 283 
+) / V . Sager 
+Integration of A I Systems in Conventional Environments 289 
+Negation in Logic Programming: 
+A Formalization in Constructive Logic 
+Frangois Bry 
+E C R C , Arabellastraße 17, D - 8 0 0 0 München 8 1 , Germany 
+ß@ecrc.de 
+A B S T R A C T The c o n v e n t i o n a l f o r m a l i z a t i o n of l o g i c p r o g r a m m i n g i n 
+c l a s s i c a l l o g i c e x p l a i n s v e r y c o n v i n c i n g l y t h e b a s i c p r i n c i p l e s of t h i s p r o -
+g r a m m i n g s t y l e . H o w e v e r , i t gives no easy o r i n t u i t i v e e x p l a n a t i o n s f o r 
+t h e t r e a t m e n t of n e g a t i o n . L o g i c P r o g r a m m i n g h a n d l e s n e g a t i o n t h r o u g h 
+t h e s o - c a l l e d ^ N e g a t i o n as F a i l u r e " i n f e r e n c e p r i n c i p l e w h i c h i s r a t h e r 
+u n c o n v e n t i o n a l f r o m t h e v i e w p o i n t of c l a s s i c a l l o g i c . D e s p i t e i t s n o n c l a s -
+s i c a l n a t u r e , t h i s i n f e r e n c e p r i n c i p l e c a n n o t be a v o i d e d i n p r a c t i c e . The 
+a p p r o p r i a t e a p p l i c a t i o n of N e g a t i o n as F a i l u r e r e q u i r e s e i t h e r s y n t a c t i c a l 
+r e s t r i c t i o n s , o r s i g n i f i c a n t changes i n t h e semantics of l o g i c p r o g r a m s . 
+I n t h i s a r t i c l e , we defend t h e thesis t h a t these s y n t a c t i c a l r e s t r i c t i o n s o r 
+s e m a n t i c a l changes a r e n a t u r a l l y a n d s i m p l y e x p l a i n e d by o b s e r v i n g t h a t 
+l o g i c p r o g r a m m i n g i n f a c t i m p l e m e n t s no m o r e t h a n a c o n s t r u c t i v e f r a g -
+ment of c l a s s i c a l l o g i c . R e l y i n g o n a " C o n d i t i o n a l F i x p o i n t P r o c e d u r e " , 
+we first define a m o n o t o n i c i n f e r e n c e p r o c e d u r e f o r l o g i c p r o g r a m s w i t h 
+n e g a t i o n t h a t a r e c o n s i s t e n t i n t h i s c o n s t r u c t i v e f r a g m e n t . Then we show 
+how t h i s p r o c e d u r e c a n be extended i n t o a " T e m a r y F i x p o i n t P r o c e d u r e " 
+f o r g e n e r a l p r o g r a m s . T h i s fixpoint p r o c e d u r e defines a t e m a r y l o g i c se-
+m a n t i c s f o r s y n t a c t i c a l l y u n r e s t r i c t e d l o g i c p r o g r a m s . F i n a l l y , we a r g u e 
+t h a t t h e c o n s t r u c t i v e i n t e r p r e t a t i o n of l o g i c p r o g r a m m i n g a l s o gives a s i m -
+p l e a n d n a t u r a l e x p l a n a t i o n of m e t a - p r o g r a m m i n g . R e l y i n g o n t h i s v i e w 
+of m e t a - p r o g r a m m i n g , we specify different f o r m s of r e f l e c t i v e r e a s o n i n g , 
+i n p a r t i c u l a r default r e a s o n i n g . 
+1. Introduction 
+Since P r o l o g (Programming in L o g i c ) has been developed by A . Colmerauer and R. 
+Kowalski, the concept of "logic programming" refers to a certain type of declara-
+tive programming languages. Logic programs are formalized as relationship between 
+31 
+terms in a logical theory [vEK76, Kow79]. This view gives a very convincing ex-
+planation of the basic principles of declarative programming languages, which is 
+independent from any inference principle. However, this formalization proves to be 
+inappropriate as soon as additional features - language constructs or syntactical re-
+strictions - are considered, that are necessary for practical applications of declarative 
+languages. 
+Negation is such a construct. Its processing, which could be considered rather unlog-
+ical by mathematicians, has led either to restrict the syntax of logic programs, or to 
+formalize their semantics in ternary logics. In this paper, we show that these syntac-
+tical restrictions and nonclassical semantics are naturally and intuitively explained 
+by referring to a rather simple fragment of classical logic. 
+This restricted logic is in fact the original form of mathematical logic. It is called 
+"constructive logic" because it rejects existence proofs that do not explicitly con-
+struct the mathematical object, the existence of which is proven. Before Cantor, 
+the restriction to constructive proofs was almost taken for granted. B y applying 
+its diagonalization principle, Cantor has shown that an additional number can be 
+defined from any enumerable set of real numbers. Cantor's definition is however 
+not a construction. Therefore his proof has been first strongly criticized. The ar-
+ticle [Cal79] provides an easy introduction to this part of mathematics and to its 
+history. Although nonconstructive proofs are nowadays no longer criticized, con-
+structive reasoning has survived in mathematics. Various constructive logics have 
+been developed aside the main stream of conventional mathematics. We do not need 
+to ref er to these theories, whose notations and vocabularies are often discouraging. 
+We shall only make use of the original and quite intuitive notion of constructive 
+proof. 
+The formalization of logic programming in constructive logic is not only useful for in-
+vestigating negation. It gives also a very natural explanation of meta-programming. 
+From the constructive viewpoint, it is rather natural to define theories or programs, 
+whose variables ränge over formulas. Since in constructive logic formulas represent 
+themselves but no platonistic objects, it is possible to interpret meta-programs as 
+first-order, constructive theories. This constructive view of meta-programming is 
+especially useful for axiomatizing non-classical logics such as, for example, autoepis-
+temic or default logics. Such axiomatizations can also be used as implementations. 
+Some authors have already observed the link between logic programming and con-
+structive reasoning. G. Huet suggests in [Hue86] to view Prolog Interpreters as proof 
+synthetisers of a sequent calculus - a kind of constructive logic. D. Bojadziev notices 
+similarities between Prolog and constructive reasoning in the short article [Boj86]. 
+Constructive aspects of Prolog are investigated by C. Beckstein in relationship with 
+T r u t h M a i n t e n a n c e Systems in [Bec88]. J . -Y . Girard, Y . Lafont, and P. Taylor sug-
+gest in [GLT89] a possible relationship between logic programming and linear logic 
+[Gir87] - a constructive logic recently proposed by J . -Y . Girard. In [Bry89a] the 
+view of logic programming as a constructive fragment of classical logic was used, 
+for the first time as far as we know, to intuitively motivating syntactical restrictions 
+32 
+like stratiflcation or ternary semantics. We do not know about any work relying on 
+constructive logic for investigating meta-programming. 
+This article consists of seven sections, the first of which is this introduction. In 
+Section 2, we recall the usual formalization of logic programming without negation. 
+Then, we consider in Section 3 the processing of negation and the difKculties resulting 
+from it. We define a "Conditional Fixpoint Operator" in Section 4. We show how 
+to use this Operator for monotonically generating consequences from programs with 
+negation that are constructively consistent. We show how syntactical properties like 
+stratiflcation [ABW88, Van88] or local stratiflcation [Prz88] are easily motivated in 
+constructive logic: They are necessary conditions for constructive consistency. In 
+Section 5, we propose a ternary valued semantics for syntactically unrestricted logic 
+programs. We define a "Ternary Fixpoint Procedure" for this semantics. Finally, 
+we propose an interpretation of meta-programming in constructive logic in Section 
+6. As examples of this interpretation, we show how reflective inference principles 
+like modal and default logics can be specified as meta-programs. Section 7 is a 
+conclusion. 
+This article is translated and adapted from the text of a talk given at the l s t Work-
+shop Information Systems and Artificial Intelligence [Bry90]. 
+2. Logic Programming without Negation 
+The inference principles of logic programming are modus ponens and the special-
+ization rule. B y modus ponens, a formula G is derived from two formulas F and 
+F =$> G. If c is a constant in the universe under consideration, specialization gives 
+rise to deriving F[c] from a universal formula Vx F[x]. These two inference rules 
+are combined in the resolution principle [Rob65a], the knowledge of which is not 
+necessary for our purposes. 
+The two inference principles modus ponens and specialization can be more or less 
+directly implemented. The simplest approach consists in applying first the special-
+ization rule for eliminating the universal quantifiers. A formula Vxyz p(x, y) A q(y, z) 
+r(x, z) - usually written as r(x, z) «— p(x, y) A q(y, z) in logic programming -
+is for example specialized by instantiating its variables in all possible ways over the 
+universe under consideration. This approach which applies the two inference rules 
+specialization and modus ponens separately and successively is usually retained in 
+T r u t h M a i n t e n a n c e Systems [Doy79, dK86]. A major drawback is the number of 
+useless instantiated formulas that are, in most cases, generated. 
+A significant improvement consists in relying on the premise of the clauses - i.e., 
+on p(x, y) A q(y, z) in the above-mentioned example - for restricting specialization: 
+Only those instances of the clause r(x, z) <— p(x, y) A q(y, z) are needecl that make 
+the conjunction p(x, y) A q(y, z) true. Note that no subsequent instanciations 
+are necessary if all variables appear in the premises, i.e., if the clause is ränge-
+r e s t r i c t e d . It is common to describe this improvement for range-restricted clauses as 
+33 
+a special type of resolution, u n i t h y p e r r e s o l u t i o n [Rob65b, vEK76]. This approach 
+is called f o r w a r d or b o t t o m - u p reasoning, for it somehow follows the direction of the 
+implication sign in the formulas or in the clauses. A remarkable efficiency can be 
+achieved in this way, which applies specialization no more than necessary. 
+Foliowing van Emdem and Kowalski [vEK76], the denotational semantics of a logic 
+program is traditionally defined in terms of bottom-up reasoning. The semantics of 
+a logic program without negation P is defined in terms of the facts that are derivable 
+from P by iterated applications of bottom-up reasoning. A facts which is derivable 
+from a specialization of a clause in P by one application of modus ponens is called 
+a d i r e c t consequence of P. The set of the direct consequences of P is noted T(P). 
+T | n (P ) denotes the set of facts that are derivable from instances of clauses in P by 
+at most n applications of the modus ponens rule. This set is inductively defined as 
+follows: 
+TT° (P) = P 
+T | n + 1 ( P ) = T(TTn(P)) U Tt n (P) 
+The sets of all facts that are derivable from P is: 
+Un€N TP (P) = TT 0 (P) u TT 1 (P) U ... U T f n (P) u ... 
+It is denoted T f " (P). This set is the fixpoint of the function T f on the program P. 
+The function T | and the computation of its fixpoints are traditionally used for 
+formalizing the semantics of logic programs without negation. Despite of an ele-
+gant analogy between model theory in logic and denotational semantics of programs 
+[vEK76], it is worth to notice that the computation of a fixpoint T|U'(P) is in prin-
+ciple a forward reasoning procedure. 
+This procedure has two forms, often called n a i v e and s e m i - n a i ' v e methods. The 
+na'ive method computes the sets T | n (P) for increasing values of n. The semi-naive 
+methods improves the na'ive methods by only Computing thoses facts of T j n + 1 ( P ) 
+that have at least one premise in 
+T | n (P) \ TT 1 1" 1!?) 
+This aims at restricting the computation of T f n + 1 ( P ) as much as possible to that of 
+T | n + 1 ( P ) \ T | n (P) 
+The Operators T and T | are monotonic on programs without negation: If Pi C P 2 , 
+then T(P a ) C T(P 2) and T | (Pi) C TT(P 2). 
+In order to avoid the generation of useless facts and to restrict as much as possible the 
+generation to relevant facts, so-called backward or t o p - d o w n reasoning methods are 
+34 
+applied. It is a quite intuitive fact, that forward reasoning cannot take into account 
+the constants occurring in queries. This inference technique indeed considers the 
+queries at the very end. As opposed backward reasoning methods start from the 
+queries. They can therefore propagate the constants occurring in queries. 
+Backward reasoning is close to the so-called problem reduction reasoning paradigm. 
+For example, in order to prove a fact p(a), a backward reasoning methods searches 
+for all clauses whose conclusions can be unified with p(a). For example, the clause 
+p(x) <- q(x) A r(x) 
+would be selected. In contrast, the following clauses would not be retained: 
+s(x) *- t(x) A u(x) 
+p(b) - v(x) 
+The premises of the selected clauses - also called "bodies" - are in turn similarly 
+processed. 
+A particular form of backward reasoning, based on linear resolution (see, e.g., 
+[Sti86]), gives the principle - or the so-called operational semantics - of the P r o l o g 
+programming language [Llo87]. Logic programming is however neither restricted to 
+linear resolution, nor to backward reasoning. In order to correctly handle recursive 
+programs, a few new procedures have been defined in the last few years, among 
+others the m a g i c sets m e t h o d [BMSU86, BR87] and SLDAL-resolution [Vie89]. It 
+has been recently observed that these methods all implement the same nonlinear 
+backward reasoning principle [Bry89b, Man89]. 1 Forward reasoning is for example 
+applied in abstract interpretation [GCS88, BD88]. 
+It is worth noting that logic programming (without negation) cannot prove all the-
+orems of (negation-free) logical theories. From the clauses 
+p(a) 
+p(f(x)) <- p(x) 
+it is possible to derive the following property: 
+VneN* p(f n(x)) 
+This universal formulas is however not derived from a logic program, because the 
+induction principle is missing in logic programming. 
+1Some methods i m p l e m e n t back ward reasoning in a language of clauses that are processed 
+forward. This property of the p r o g r a m m i n g language used does however not characterize the 
+I m p l e m e n t a t i o n . 
+35 
+Disjunctive formulas like a V b cannot be expressed in logic programs. (The logical 
+dependency of a fact a from b or from c can however be expressed by means of two 
+clauses a <— b and a <— c.) In logic programming, a disjunctive statement 
+a V b 
+can only be proven by proving a or by proving b. Classical logic gives rise to other 
+proofs, for example based on the t e r t i o n o n d a t u r or excluded middle principle. 
+The above-mentioned restrictions are all constructive. The formalization of logic 
+programming in füll classical logic is already questionable for programs without 
+negation. A n interpretation in constructive logic would be more natural. 
+3. A Non-Classical Inference Principle: Negation as Failure 
+In logic programming, a negated formula - i F is considered proven when F is not 
+provable. This inference principle is called n e g a t i o n as f a i l u r e [Cla78]. This manner 
+to derive negative Information can be called a reflective inference principle, for the 
+reasoning System reflects on its own knowledge. It departs from classical logic which 
+treats negative and positive expressions similarly. 
+The negation as failure principle is rather intuitive. It is often used in every-day life. 
+For example, one concludes that there is no direct flight from Nürnberg to Stuttgart 
+if one finds none in the time table. This reasoning is nonmonotonic: If new flights 
+are created, negative conclusions might be no longer valid. 
+The negation as failure principle has been introduced for relational databases under 
+the name of c l o s e d w o r l d a s s u m p t i o n in the seventies [Rei78]. Because it is natural 
+and also because it gives rise to an efficient backward evaluation of negated expres-
+sions, this principle has been retained. It is quite interesting to notice that inference 
+principles that are, like negation as failure, unconventional for mathematicians, but 
+rather intuitive for nonmathematicians, have been proposed within constructive log-
+ics. 
+Negation as failure is very close to default reasoning [Rei80]. One can for example 
+see the condition r(x) in the clause p(x) <— q(x) A - i r (x) as an exception for the 
+negation-free clause p(x) <— q(x). Since negation as failure is a reflective inference 
+principle, it is also related to modal nonmonotonic logics - e.g., autoepistemic logic 
+[Moo85]. 
+Negation as failure poses problems for several reasons. In classical logic, expressions 
+such as a <= b and a V ->b are equivalent. As a consequence, implications like 
+p <= r A -iq 
+and 
+36 
+q r A ~»p 
+are also equivalent. Are however the following clauses also equivalent? 
+p <— r A ->q 
+q <— r A -ip 
+Obviously not: From a program consisting of the fact r and first clause, p and -»q 
+are derived. In contrast ->p and q follow from r and the second clause. 
+In constructive logic, the formulas a <= b and a V -«b are not equivalent. The im-
+plication a b means only that a can be proven as soon as b is provable. If impli-
+cations are only interpreted in this constructive manner, an implication a <= -^a is 
+always false: a and -»a cannot be both provable. The constructive interpretation of 
+implications gives a natural explanation, why the two clauses considered above do 
+not have the same effect: They are not constructively equivalent. 
+Another difficulty caused by the negation as failure principle is the nonmonotonicity 
+of the Operator T. Consider the program P = {p <— ->q, q <— r, r}. Since q $ P and 
+r £ P, we have T(P) = {p, q}. The derivation of p is however questionable because 
+it relies on - iq. The later derivation of q contradicts this assumption. The Operator 
+T therefore is not suited to defining the denotational semantics of programs with 
+negation. In the next section, we propose a monotonic fixpoint procedure for such 
+logic programs. 
+4. Monotonie Reasoning on Programs with Negation 
+In order to restore monotonic reasoning on programs with negation, one has to 
+delay the evaluation of negated expressions. Instead of generating facts, as does the 
+Operator T, we propose to collect the negative premises for later evaluations. 
+The facts a and b and the clause c <— a A b A -*c give for example rise to deriving 
+the clause c «— ->c. From the two following clauses 
+a <— b A ->c 
+b <- d 
+one can derive the clause a <— - ic A ->d. Nonground clauses are appropriately in-
+stanciated and similarly processed. 
+We first illustrate on an example the Operator based on this principle. Then, we recall 
+the formal deflnition from the article [Bry89a]. Since the new Operator generates a 
+kind of conditional facts, we call it "Conditional Fixpoint Operator" and denote it 
+T c . 
+Let P be the following logic program: 
+37 
+p(x) <— q(x) A -•t(x) A - T ( X ) 
+q(x) <— s(x) A -"t(x) 
+r(x) <— s(x) A _ i u(x) 
+s(a) 
+s(b) u(b) 
+u(c) 
+Düring a first phase, the following clauses - or conditional facts - are generated, 
+until a fixpoint is reached. 
+Then, in a second phase, these clauses are simplified. The literals -«t(a) and -•t(b) 
+are eliminated, since there are neither facts nor clauses defining t. Similarly, -<u(a) 
+is eliminated. The r(a) and the clause p(a) <— -«r(a) result from these first elimina-
+tions. Since r(a) has been already obtained, this clause is useless: We eliminate it 
+as well. Pursuing this elimination process results in the following set of facts: 
+The definition of the T c Operator given below makes use of a few notations. Given a 
+literal or a conjunction of literals B , 'pos(B)' will denote the conjunction of positive 
+literals in B or, if this is the case, the only positive literal in B . Similarly, 'neg(B)' 
+will denote the conjunction of negative literals or the single negative literal in B . If 
+B does not contain any positive literal (negative literal, resp.) 'pos(B)' ('neg(B)', 
+resp.) is defined as 'true\ A clause, the body of which is 'true' or a conjunction of 
+negative literals, will be called a "conditional fact". 
+Definition 1: 
+Let P be a logic program. A conditional fact 
+T c T ^ P ) : P T c | 2 ( P ) : T c T^P) 
+q(a) <- -t(a) 
+q(b) - -t(b) 
+r(a) <— ->u(a) 
+r(b) <- -.u(b) 
+p(a) <— -it(a) A ~T(a) 
+p(b) « - -.t(b) A -.r(b) 
+{q(a), q(b), r(a), p(b)} 
+C: ka <- neg(B<r) C i A ... A Cj A ... A Q 'n 
+is a conditional consequence of P - i.e., C € T C (P) - if: 
+1. There is a clause (A <— B) in P 
+2. There is a Substitution a instanciating the variables in (A <— B) with 
+ground terms of the language of P 
+3. pos(B)cr = true 
+or pos(B) = A i A ... A A , A . . . A n (n > 1) and for all i £ {1, n} there 
+is a clause Aj <— Ci in P, or C\ = true and A i is a fact in P. 
+Since negative literals are not evaluated during the computation of T C (P) , we have: 
+38 
+Proposition: 
+The Operator T C (P) is monotonic. It has a unique fixpoint. 
+The Conditional Fixpoint Procedure is defined as follows: 
+Definition 2: 
+Let P be a logic program (without function Symbols). The Conditional 
+Fixpoint Procedure consists of two successive phases: 
+1. The fixpoint T C (P) is first computed. 
+2. The set T C (P) is reduced to a set of facts by applying the following 
+rewriting rules: 
+The reduction phase of the Conditional Fixpoint Procedure always terminates, as 
+soon as the program under consideration is constructively consistent [Bry89a]. This 
+condition prevents that a clause, the premise of which is the negation of the conclu-
+sion - e.g., p(a) <— -«p(a) - is derivable. In the next section, we show the procedure 
+of Definition 2 can be adapted to also handle logic programs that are constructively 
+inconsistent. 
+The extension of Definition 2 to logic programs with function symbols is possible. 
+It requires however more complex notations. For the sake of simplicity, we do not 
+give it here. 
+The Operator T c does not perform nonmonotonic deductions. However, consequences 
+of a program P can still become invalid in a program extending P with additional 
+facts or clauses. 
+Düring the last few years, various classes of syntactically restricted logic programs 
+with negation have been proposed, among others hierarchical, stratified [ABW88, 
+Van88], and locally stratified [Prz88] programs. The constructive formalization of 
+logic programming gives a rather simple motivation for these syntactical restrictions: 
+There are necessary conditions for constructive consistency [Bry89a]. Previously, 
+these syntactical restrictions were only procedurally motivated. 
+(F +- true) F 
+F A true -> F 
+false A F —* false 
+true A F -> F 
+F A false —» false 
+(F <- false) - 4 A 
+->F —> true 
+if F js neither a fact, nor the 
+conclusion of a clause. 
+39 
+5. Ternary Logic for Unrestricted Programs 
+The fixpoint semantics of logic programs with negation described in the previous 
+section in terms of the Operator T c does not take into account logic programs that 
+are constructively inconsistent. In practice, it is however often desirable to accept 
+such programs by somehow "ignoring" their inconsistent parts. In this section, we 
+propose a semantics for general programs which formalizes this intention of "over-
+seing" inconsistencies. 
+This semantics is defined by slightly modifying the reduction phase of the Condi-
+tional Fixpoint Procedure. Clauses such as p(a) <— -> p(a) that are false from the 
+constructive viewpoint are simply eliminated, and the facts that are "defined" by 
+such clauses - p(a) in case of p(a) <— -» p(a) - are marked as "unknown". They are 
+thus distinguished from facts without any definition. The negation as failure princi-
+ple is maintained by interpreting as "false" those facts that have neither consistent, 
+nor inconsistent definitions. We first illustrate this modification of the Conditional 
+Fixpoint Procedure on an example. 
+Let p be the following logic program: 
+p <— a q <— ->p a 
+p <— q r <— -> r 
+From P the following marked facts are derived: a: true, p: true, r: unknown, and 
+q: false. This semantics is called ternary or 3-valued, for it has three truth values. 
+The following inequalities express, in the usual formalism of ternary logics, the 
+precedences between the truth values: 
+true > unknown > false 
+A fact is not assigned the truth value "false" as soon as it can be proven - i.e., 
+marked "true" - or marked "unknown". Similarly, as soon as a fact is proven, it is 
+removed from the facts marked "unknown". 
+We call "Ternary Fixpoint Procedure" the reasoning informally described above. 
+Like the Conditional Fixpoint Procedure, it is based on the T c Operator. It is 
+formally defined as follows: 
+Definition 3: 
+Let P be a logic program (without function Symbols). The Ternary 
+Fixpoint Procedure consists of three successive phases: 
+1. The fixpoint T c f(P) is first computed. 
+2. The set T c f (P) is then reduced to a set of marked facts by applying 
+the following rewriting rules, where F denotes an atom: 
+40 
+F -> (F: true) (F <- true) (F: true) 
+true A F -> F F A true -> F 
+F A false —• false false A F —> false 
+(F <- false) A 
+(F *- -,F) -> (F: unknown) 
+->F —» true 
+if F is neither a fact, nor a fact marked 
+"true", nor the conclusion of a clause 
+in P 
+3. Finally, all facts that are neither marked "true", nor "unknown" are 
+marked "false"; moreover "unknown" marks are removed from facts also 
+marked "true". 
+It is worth noting that ternary logics are constructive logics. Ternary logics for 
+unrestricted logic programs have been defined in various ways, for example in [Fit85, 
+GL88, VRS88, BF90, Van89]. They do not significantly differ from the above-
+defined semantics. Moreover, the Ternary Fixpoint Procedure can easily be adapted 
+to reflect these differences. Some authors make use of similar concepts as the T c 
+Operator, which was introduced in [Bry89a]. 
+Like the Conditional Fixpoint Procedure, and in the same way, the Ternary Fixpoint 
+Procedure can be extended to logic programs with function symbols. 
+6. Application: Reflective Reasoning 
+Constructive logic is not platonistic. Constructive reasoning does not ref er to any 
+meaning of the formulas, but to the formulas themselves. A frequent example of 
+this way of thinking is the hypothesis that distinct constants denote distinct objects. 
+This hypothesis is called U n i q u e Name A x i o m in database theory. In logic program-
+ming, this hypothesis is conveyed through the restriction to Herbrand models. It is 
+questionable, whether human thinking is restricted in a similar way. We shall not 
+try to ans wer this philosophical issue. We just notice that constructive reasoning is 
+well suited to artificial intelligence: A Computer just constructs. 
+From the constructive viewpoint, it is rather natural to define logic programs with 
+variables ranging over formulas. Such programs are called "meta-programs" [SS86b]. 
+They are often seen as second-order theories. The constructive viewpoint, however, 
+suggests another formalization. Since the variables of meta-programs represent for-
+mulas, but no mathematical objects defined by these formulas, meta-programs can 
+be formalized in first-order logic - see in particular [End72], pp. 281-289. 
+Meta-programming is a mean to overcome restrictions of logic programming, for it 
+gives rise to specifying within logic programming, reasoning principles different from 
+41 
+that of logic programming. We illustrate this point by giving some examples of meta-
+programs that implement some forms of reflective and nonmonotonic reasoning. 
+Logic programming does not give rise to deriving universal formulas. The following 
+meta-program specify an evaluation of universal formulas in implicative form. The 
+specification is sound and complete for restricted universal quantification [Bry89c]. 
+forall(x, y =>> z) <— -> (y A -> z) 
+Let F be the formula Vx p(x) =>• q(x) and P the program {p(a), p(b), q(a), q(b), 
+q(c)}. When y is instanciated with p(x), and z with q(x), a backward evaluation 
+of forall(x, y z) binds the variable x successively with all values in p-facts. For 
+each instantiation of x, q(x) is checked. It is worth noting, that this way to prove 
+universal formulas is constructive. 
+We show by means of a simple example how a form of autoepistemic reasoning can 
+be easily implemented by a logic meta-program. 
+Let A , B , and C be three agents. assume that A believes all what B believes, provided 
+that C does not believe it. Assume also that B believes everything provable. Assume 
+finally that C believes everything simple. We assume that an information is simple 
+if it is provable without applying modus ponens. 
+believes(A, x) «— believes(B, x) A -» believes(C, x) 
+believes(C, x) <— fact(x) 
+believes(B, x) <— proven(x) 
+believes(C, x) *— simple(x) 
+simple(Fi A F 2 ) <— s i m p l e ^ ) A simple(F 2) 
+simple(F) <- fact(F) 
+Finally, we propose a meta-program for default reasoning. General rules are assumed 
+to be stored is facts by means of a predicate "clause". For example, 
+clause(flies(x) <— bird(x)) 
+means that birds normally fly. Exceptions to general rules are assumed to be ex-
+pressed by using an "except" predicate. Since penguins are birds, but do not fly, we 
+have: 
+except (flies (penguin)) 
+The following meta-program implements default reasoning: 
+proved(x) 4 - clause(x <— y) A proved(y) A -> except(x) 
+proved(xi A x a ) <— proved(xi) A proved(x2) 
+proved(x) <— fact(x) 
+42 
+From the following object-program 
+clause(flies(x) <— bird(x)) 
+bird(crow) 
+bird(penguin) 
+except(flies(penguin)) 
+the above-defined meta-program derives only the fact flies(crow). 
+It is worth noting that exceptions - i.e., "except" facts - can as well be defined 
+by means of clauses. These clauses in turn can admit exceptions. Processing such 
+"nested exceptions" by means of the Conditional or Ternary Fixpoint Procedures 
+results in the hierarchical reasoning suggested by Poole in [Poo98] for default reason-
+ing Systems. Thus, logic meta-programming is very convenient to easily specifying 
+- and implementing - sophisticated default logics. 
+We illustrate the notion of "nested exceptions" on an example. Cars must stop if 
+the traffic light is red. This rule however does not apply to ambulance cars provided 
+they are in Service. This last restriction - i.e., "in service" - may be viewed as 
+an exception to the derogatory rule for ambulance cars. In the formalism of the 
+above-defined meta-program, this example can be represented as follows: 
+stop <— red 
+except(stop) <— ambulance 
+except (except (stop)) <— after-service 
+Instead of refering to predicates - "stop" and "except(stop)" in the previous example 
+- exceptions can also ref er to clauses. This requires a slight modification of the 
+formalism. This is easily achieved by, for example, naming the clauses and modifying 
+the "proved" meta-program. We assume that a clause x <— y is uniquely assigned an 
+identifier z. We also assume that clauses named in this way can be retrieved using 
+a binary predicate "clause": 
+clause(z, x <— y) 
+The following meta-program handles exceptions to clauses: 
+proved(x) <— clause(z, x «— y) A proved(y) A -> except(z) 
+proved(xi A x a ) <— proved(xi) A proved (x 2) 
+proved (x) +— fact(x) 
+Döing so, different exceptions can be given for "stop", depending on the stop-rule 
+under consideration. Such a refined representation give rises, for example, to express 
+that there is no derogation to stopping at level crossing when a train arrives. The 
+following clauses formalize this example: 
+43 
+clause(l, stop *— red) 
+clause(2, stop <— level-crossing A train) 
+clause(3, except(l) <— ambulance) 
+clause(4, except(except(l)) *— after-service) 
+Clearly, some applications might require to handle both, exceptions to clauses as 
+well as exceptions to predicates, depending on the predicates. We leave specifying 
+the corr->:ponding meta-program to the reader, for it is quite easy. 
+Because it gives rise to easily refining various deduction schemes, we argue that meta-
+programming is very convenient for defining and implementing complex reasoning, 
+especially nonmonotonic reasoning Systems. 
+7. Conclusion 
+In this article, we have proposed a particular interpretation of logic programs. Ac-
+cording to this interpretation, logic programming departs from modern mathematics. 
+It restricts reasoning to certain inference rules, in a manner which corresponds to a 
+primitive form of mathematical logic, constructive logic. It provides us with rather 
+natural explanations for several features of logic programming. 
+In particular, it explains very naturally syntactical restrictions such as "stratiflca-
+tion" and "local stratiflcation" that were proposed for overcoming difficulties result-
+ing from the non-monotonicity of negation as failure. The constructive interpreta-
+tion of logic programs also provides us with a convenient framework for defining a 
+ternary semantics for syntactically unrestricted programs. 
+The constructive viewpoint also suggests a formalization of meta-programming. B y 
+means of a few examples of meta-programs^ we have shown how logic program-
+ming is closely related to other non-monotonic logics. We have shown how meta-
+programming gives rise to elegant specifications of various logics that depart from 
+the very semantics of logic programming. These specifications are as well implemen-
+tations. Thus, although it implements a restricted, constructive fragment of classical 
+logic, logic programming gives rise, through meta-programming, to overcoming its 
+own limitation. 
+We argue that it is preferable to specify refined forms of reasoning as logic meta-
+programs, instead of developing new formalisms or new implementation paradigms, 
+for the following reasons. First, constructive reasoning - the paradigm of logic 
+programming - is very natural and intuitive. Second, the meta-programming ap-
+proach gives rise to easily combining into one System, different forms of reasoning. 
+Finally, program transformation techniques - in particular partial evaluation, see, 
+e.g., [SS86a] - have been developed for automatically generating efficient implemen-
+tations from specifications in form of logic meta-programs. 
+44 
+Acknowledgement 
+This research was partly supported by the European Community in the framework 
+of the Basic Research Action C o m p u l o g No. 3012. 
+References 
+[ABW88] K . R. Apt , H . A . Blair, and A . Walker. F o u n d a t i o n s of D e d u c t i v e 
+Databases a n d L o g i c P r o g r a m m i n g , chapter Towards a Theory of Declar-
+ative Knowledge. Morgan Kaufmann, Los Altos, Calif., 1988. 
+[BD88] M . Bruynooghe and D. De Schreye. Tutorial Notes for: Abstract Inter-
+pretation in Logic Programming. Research report, University of Leuven, 
+1988. Invited tutorial of the bth Int. Conf. on Logic Programming (ICLP), 
+Seattle, 1988. 
+[Bec88] C. Beckstein. Z u r L o g i k der L o g i k - P r o g r a m m i e r u n g - E i n k o n s t r u k t i v e r 
+Ansatz. Informatik-Fachbericht 199. Springer-Verlag, 1988. 
+[BF90] N . Bidoit and C. Froidevaux. Negation by Default and Unstratifiable 
+Logic Programs. T h e o r e t i c a l C o m p u t e r Science, 1990. To appear. 
+[BMSU86] F . Bancilhon, D . Maier, Y . Sagiv, and J . Ullamn. Magic Sets and 
+other Strange Ways to Implement Logic Programs. In P r o c . 5th A C M 
+S I G M O D - S I G A C T Symp. o n P r i n c i p l e s of D a t a b a s e Systems ( P O D S ) , 
+1986. 
+[Boj86] D. Bojadziev. A Constructive View of Prolog. J o u r n a l of L o g i c P r o -
+g r a m m i n g , 3(l):69-74, 1986. 
+[BR87] C. Beeri and R. Ramakrishnan. On the Power of Magic. In P r o c . 
+6th A C M S I G M O D - S I G A C T Symp. o n P r i n c i p l e s of D a t a b a s e Systems 
+( P O D S ) , 1987. 
+[Bry89a] F . Bry. Logic Programming as Constructivism: A Formalization and 
+its Application to Databases. In P r o c . Sth A C M S I G A C T - S I G M O D -
+S I G A R T Symp. o n P r i n c i p l e s of D a t a b a s e Systems ( P O D S ) , Philadel-
+phia, Penn., March 1989. 
+[Bry89b] F . Bry. Query Evaluation in Recursive Databases: Bottom-up and 
+Top-down Reconciled. In P r o c . l s t I n t . Conf. o n D e d u c t i v e a n d O b j e c t -
+O r i e n t e d Databases ( D O O D ) , Kyoto, Japan, Dec. 1989. The complete 
+version of this article will appear in the special issue of D a t a & K n o w l -
+edge E n g i n e e r i n g devoted to the D O O D '89 Conference. 
+[Bry89c] F . Bry. Towards an Efficient Evaluation of General Queries: Quantifier 
+and Disjunction Processing Revisited. In P r o c . A C M - S I G M O D Conf. o n 
+M a n a g e m e n t of D a t a ( S I G M O D ) , Portland, Oreg., May-June 1989. 
+45 
+[Bry90] F . Bry. Negation in logischer Programmierung: Eine Formatierung in 
+konstruktiver Logik. Research Report IR-KB-72, E C R C , 1990. 
+[Cal79] A . Calder. Constructive Mathematics. S c i e n t i f i c A m e r i c a n , 241 (4):134-
+143, 1979. 
+[Cla78] K . L . Clark. L o g i c a n d D a t a b a s e s , chapter Negation as Failure. Plenum 
+Press, New York, 1978. 
+[dK86] J . de Kleer. A n Assumption-Based Truth Maintenance System. A r t i f i c i a l 
+I n t e l l i g e n c e , 28:127-162, 1986. 
+[Doy79] J . Doyle. A Truth Maintenance system. A r t i f i c i a l I n t e l l i g e n c e , 24, 1979. 
+[End72] H . B . Enderton. A M a t h e m a t i c a l I n t r o d u c t i o n t o L o g i c . Academic Press, 
+1972. 
+[Fit85] M . Fitt ing. A Kripke-Kleene Semantics for Logic Programs. J o u r n a l of 
+L o g i c P r o g r a m m i n g , 4:295-312, 1985. 
+[GCS88] J . Gallagher, M . Codish, and E . Shapiro. Specialisation of Prolog and 
+F C P Programs Using Abstract Interpretation. New G e n e r a t i o n C o m -
+p u t i n g , 6:159-186, 1988. 
+[Gir87] J . -Y . Girard. Linear Logic. T h e o r e t i c a l C o m p u t e r Science, 50:1-102, 
+1987. 
+[GL88] M . Gelfond and V . Lifschitz. The Stahle Model Semantics for Logic 
+Programming. In P r o c . bth I n t . Conf. a n d Symp. o n L o g i c P r o g r a m m i n g 
+( I C L P - S L P ) , Seattle, 1988. 
+[GLT89] J . -Y. Girard, Y . Lafont, and P. Taylor. P r o o f s a n d Types. Cambridge 
+Tracts in Theoretical Computer Science 7. Cambridge University Press, 
+1989. 
+[Hue86] G. Huet. F u n d a m e n t a l s of A r t i f i c i a l I n t e l l i g e n c e , chapter Deduction and 
+Computation. L N C S 232. Springer-Verlag, 1986. 
+[Kow79] R. Kowalski. L o g i c f o r P r o b l e m S o l v i n g . North Holland, 1979. 
+[Llo87] J . Lloyd. F o u n d a t i o n s of L o g i c P r o g r a m m i n g . Symbolic Computation. 
+Springer-Verlag, 1987. Second Edition. 
+[Man89] R. Manthey. Can We Reach a Uniform Paradigm for Deductive Query 
+Evaluation? In P r o c . 3rd I n t . G l Congress " K n o w l e d g e Based Systems", 
+München, Oct. 1989. 
+[Moo85] R. C. Moore. Semantical Considerations on Nonmonotonic Logic. A r t i -
+ficial I n t e l l i g e n c e , 25, 1985. 
+46 
+[Poo98] D. Poole. Explanation and Prediction: A n Architecture for Default and 
+Abductive Reasoning. Tech. Report 89-4, Dept. of Comp. S c , Univ. of 
+British Columbia, 198. 
+[Prz88] T. C. Przymusinski. F o u n d a t i o n s of D e d u c t i v e Databases a n d L o g i c P r o -
+g r a m m i n g , chapter On the Declarative Semantics of Deductive Databases 
+and Logic Programs. Morgan Kaufmann, Los Altos, Calif., 1988. 
+[Rei78] R. Reiter. O n C l o s e d W o r l d D a t a b a s e s , pages 56-76. Plenum Press, New 
+York, 1978. 
+[Rei80] R. Reiter. A Logic for Default Reasoning. A r t i f i c i a l I n t e l l i g e n c e , 13, 
+1980. 
+[Rob65a] J . A . Robinson. A Machine-Oriented Logik Based on the Resolution 
+Principle. J o u r n a l of t h e A C M , 12(1):23-41, 1965. 
+[Rob65b] J . A . Robinson. Automated Deduction with Hyper-Resolution. J o u r n a l 
+of C o m p . M a t h . , 1:227-234, 1965. 
+[SS86a] S. Safra and E . Shapiro. Meta Interpreters for Real. In P r o c . \ 2 t h I F I P 
+W o r l d C o n g r e s s , 1986. 
+[SS86b] L . Sterling and E . Shapiro. The A r t of P r o l o g . M I T Press, 1986. 
+[Sti86] M . E . Stickel. A n I n t r o d u c t i o n t o A u t o m a t e d D e d u c t i o n , pages 75-132. 
+Springer Verlag, Berlin, 1986. 
+[Van88] A . Van Gelder. F o u n d a t i o n s of D e d u c t i v e Databases a n d L o g i c P r o g r a m -
+m i n g , chapter Negation as Failure Using Tight Derivations for General 
+Logic Programs. Morgan Kaufmann, Los Altos, Calif., 1988. 
+[Van89] A . Van Gelder. The Alternating Fixpoint of Logic Programs with Nega-
+tion. In P r o c . Sth A C M S I G A C T - S I G M O D - S I G A R T Symp. o n P r i n c i -
+ples of D a t a b a s e Systems ( P O D S ) , Philadelphia, Penn., March 1989. 
+[vEK76] M . van Emden and R. Kowalski. The Semantics of Predicate Logic as a 
+Programming Language. J o u r n a l of t h e A C M , 23(4):733-742, 1976. 
+[Vie89] L . Vieille. Recursive Query Processing: The Power of Logic. T h e o r e t i c a l 
+C o m p u t e r Science, 69(l): l-53, Dec. 1989. 
+[VRS88] A . Van Gelder, K . A . Ross, and Schlipf J . S. The Well-Founded Seman-
+tics for General Logic Programs. In P r o c . 7th A C M S I G A C T - S I G M O D -
+S I G A R T Symp. o n P r i n c i p l e s of D a t a b a s e Systems ( P O D S ) , Austin, 
+Texas, March 1988. 

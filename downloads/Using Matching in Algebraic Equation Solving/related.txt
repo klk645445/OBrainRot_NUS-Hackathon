@@ -1,0 +1,15 @@
+**
+- Algebraic matching
+- Rewrite rules
+- Commutativity and associativity
+- PRESS algebra system
+- PROLOG programming language
+- Meta-level inference
+- Isolation, collection, and attraction rules
+- Recursive matching
+- Algebraic solving for pattern variables
+- Fuzzy matching
+- Quadratic and cubic equations
+- Trigonometric equations
+
+**

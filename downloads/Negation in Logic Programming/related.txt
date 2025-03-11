@@ -1,0 +1,3 @@
+- Key concepts: Logic programming, constructive logic, negation as failure, fixpoint procedures, meta-programming.
+- Methodologies: Conditional Fixpoint Procedure, Ternary Fixpoint Procedure.
+- Terms: Classical logic, closed world assumption, default reasoning, reflective inference, Herbrand models.

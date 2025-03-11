@@ -1,39 +1,51 @@
+import os
+
+from read_utils.GPT import getGPTresponse
+from read_utils.read_utils import preextract
 from scraping import *
 from audio import * 
 from force_alignment import * 
 from dict import * 
 from video_generator import * 
 from search import *
+from read_utils import *
+import os
 
-def main(reddit_url, llm  = False, scraped_url = 'texts/scraped_url.txt', output_pre = 'texts/processed_output.txt', \
+def main(paper, output_pre = 'texts/processed_output.txt', \
           final_output = 'texts/oof.txt',speech_final = 'audio/output_converted.wav', subtitle_path = 'texts/testing.ass', \
             output_path = 'final/final.mp4',speaker_wav="assets/default.mp3", video_path = 'assets/subway.mp4'):
-    print("L1: SCRAPING RIGHT NOW")
-    if not llm:
-        map_request = scrape(reddit_url)
-    else:
-        print("Using LLM to determine best thread to scrape")
-        print("-------------------")
-        reddit_scrape = scrape_llm(reddit_url)
-        text = vader(reddit_scrape)
-        api = input("Please input the API key\n")
-        map_request= groq(text, api) 
-    print(map_request)
-    save_map_to_txt(map_request,scraped_url)
+
+    print("L1: Downloading PDF")
+
+    preextract(paper)
+    os.chdir("./downloads/" + paper["title"])
+
+    contents = []
+
+    print("L2: Prompting GPT")
+    with open('./speech.txt', 'w') as file:
+        contents = getGPTresponse()
+        file.write(contents[1])
+
+    with open('./related.txt', 'w') as file:
+        file.write(contents[0])
+
+    os.chdir("../..")
+
     # ## AUDIO CONVERSION 
-    print("L2: AUDIO CONVERSION NOW (TAKES THE LONGEST)")
-    audio(scraped_url, speaker_wav = speaker_wav)
+    print("L3: AUDIO CONVERSION NOW (TAKES THE LONGEST)")
+    audio(f'downloads/{paper["title"]}/speech.txt', speaker_wav = speaker_wav)
     convert_audio('audio/output.wav',speech_final)
     
     # IMPORTANT PRE PROCESSING STUFF 
-    process_text(scraped_url, output_pre)
+    process_text(f'downloads/{paper["title"]}/speech.txt', output_pre)
     process_text_section2(output_pre, final_output)
 
     with open(final_output, 'r') as file: 
         text = file.read().strip()
     
     # A BUNCH OF HARDCORE FORCED ALIGNMENT FORMATTING
-    print("L3: FORCE ALIGNMENT")
+    print("L4: FORCE ALIGNMENT")
     transcript = format_text(text)
     bundle, waveform, labels, emission1 = class_label_prob(speech_final)
     trellis,emission,tokens = trellis_algo(labels,text,emission1)
@@ -45,7 +57,7 @@ def main(reddit_url, llm  = False, scraped_url = 'texts/scraped_url.txt', output
         timing_list.append((display_segment(bundle, trellis, word_segments, waveform, i)))
     
     # FINAL VIDEO
-    print("L4: VIDEO GENERATION")
+    print("L5: VIDEO GENERATION")
     convert_timing_to_ass(timing_list, subtitle_path)
 
     ## Finally, we need to generate the brain rot video tself
@@ -53,4 +65,4 @@ def main(reddit_url, llm  = False, scraped_url = 'texts/scraped_url.txt', output
     print("DONE! SAVED AT " + output_path)
 
 if __name__ == "__main__":
-    main("https://www.reddit.com/r/askSingapore/", llm = True)
+    main("https://www.reddit.com/r/askSingapore/")

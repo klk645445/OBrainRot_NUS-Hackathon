@@ -24,6 +24,32 @@
             flex-direction: column;
             align-items: center; /* Center child elements horizontally */
         }
+
+        #generating{
+            align-items: center;
+        }
+        #related{
+            flex-direction: column;
+            gap: 0px;
+            margin-top: 5px;
+            align-items: left;
+        }
+
+        select{
+            width: 100%;
+            min-height: 30px;
+        }
+
+        #dropdown{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            width: fit-content;
+            margin-top: 10px;
+            width: 100%;
+        }
+
         h1 {
             font-size: 24px;
             margin-bottom: 20px;
@@ -44,6 +70,15 @@
             width: 300px;
         }
         button {
+            padding: 10px 20px;
+            background-color: #8DB600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #generate{
             padding: 10px 20px;
             background-color: #8DB600;
             color: white;
@@ -88,6 +123,16 @@
             border-radius: 34px;
         }
 
+        #loading {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            width: fit-content;
+            margin-top: 10px;
+         }
+
         .slider:before {
             position: absolute;
             content: "";
@@ -101,6 +146,7 @@
             border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
 
         input:checked + .slider {
             background-color: #4cd964;
@@ -119,54 +165,73 @@
 </head>
 <body>
     <div class="container">
-        <h1>OpenBrainRot Video Generator</h1>
+        <h1>BrainGlow Video Generator</h1>
         <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" width="400" height="400">
-        <form id="video-form" action="/generate" method="post">
+        <form id="video-form" action="/fetch" method="post">
             <div class="input-container">
-                <label class="switch">
-                    <input type="checkbox" id="reddit-toggle" name="is_reddit_thread">
-                    <span class="slider"></span>
-                </label>
-                <input type="text" id="link-input" name="link" placeholder="Please Insert Link">
-                <button type="submit">Generate Video</button>
+                <input type="text" id="link-input" name="link" placeholder="Please Type in Keywords">
+                <button type="submit">Fetch Papers</button>
             </div>
+            <div id="loading" style="display: none;">
+                 <img src="{{ url_for('static', filename='loading.gif') }}" alt="Logo" width="30" height="30">
+                 <p>Fetching Papers</p>
+            </div>
+            <div id="papersFound" style="margin-top: 20px; display: none;">
+                <h1 style="display:inline" >Papers Found</h1>
+            <div id="dropdown" style="display: block inline; ">
+                <select name="Papers" id="papers">
+                </select>
+                <button id="generate">Generate</button>
+            </div>
+            </div>
+
         </form>
-        <div id="video-container"></div>
+        <div id="generating" style="display: none;">
+            <img src="{{ url_for('static', filename='loading.gif') }}" alt="Logo" width="30" height="30">
+            <p>Generating... This may take awhile.</p>
+       </div>
+        <div id="video-container">
+        </div>
+        <div id="related" style="display:none">
+            <h1>
+                Related:
+            </h1>
+        </div>
     </div>
     <script>
         const linkInput = document.getElementById('link-input');
-        const redditToggle = document.getElementById('reddit-toggle');
-        const isRedditThreadInput = document.getElementsByName('is_reddit_thread')[0];
         const form = document.getElementById('video-form');
-    
-        redditToggle.addEventListener('change', function() {
-            if (this.checked) {
-                linkInput.placeholder = "Please Insert Reddit Thread Link";
-                isRedditThreadInput.value = "true";
-            } else {
-                linkInput.placeholder = "Please Insert Reddit Link";
-                isRedditThreadInput.value = "false";
-            }
-        });
-    
+        const loading = document.getElementById('loading');
+        const generateLoading = document.getElementById('generating');
+        const dropdown = document.getElementById('papersFound');
+        const select = document.getElementById('papers');
+        const generate = document.getElementById('generate')
+        var papers;
+
         form.addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent form submission
-            generateVideo();
+            fetchPapers();
         });
-    
-        function generateVideo() {
-            const link = linkInput.value;
-            const isRedditNotThread = redditToggle.checked;
 
-            console.log("Sending request to /generate");  // Debug
+        generate.addEventListener('click', function(event){
+            event.preventDefault(); // Prevent form submission
+            generateBrainRot();
+        });
+
+        function generateBrainRot(){
+            let index = select.options[select.selectedIndex].value;
+            generateLoading.style.display = "flex";
+            related.style.display = "none";
+
+
+            console.log("Sending request to /generate")
             fetch('/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    link: link,
-                    is_reddit_thread: isRedditNotThread
+                    paper: papers[index]
                 })
             })
             .then(response => response.json())
@@ -180,8 +245,78 @@
                                                     <source src="${data.video_url}?t=${timestamp}" type="video/mp4">
                                                     Your browser does not support the video tag.
                                                 </video>`;
+
+                    related.style.display = "flex";
+                    generateLoading.style.display = "none";
+                    
+                    //deleting previous references
+                    related.innerHTML = "";
+
+                    var header = document.createElement('h1');
+                    header.innerHTML = "Related:";
+                    header.style.display = "inline";
+                    related.appendChild(header);
+                    
+                    for(let i = 0; i < data.related.length; i++){
+
+                        var text = document.createElement('p');
+                        text.innerHTML = data.related[i];
+                        header.style.display = "inline";
+
+                        text.addEventListener('click', function(event){
+                            event.preventDefault();
+                            linkInput.value = data.related[i];
+                            fetchPapers();
+                        });
+
+                        related.appendChild(text);
+                    }
+
+
                 } else {
                     alert("Video generation failed: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });       
+        }
+
+        function fetchPapers(){
+            const keywords = linkInput.value;
+
+            loading.style.display = "flex";
+            dropdown.style.display = "none";
+
+             console.log("Sending request to /fetch");
+             fetch('/fetch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        keywords: keywords,
+                    })
+             })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Received response from /fetch");  // Debug
+                if (data.papers) {
+                    alert("Papers fetched Successfully!");
+                    loading.style.display = "none";
+                    dropdown.style.display = "block";
+                    papers = data.papers;
+                    select.innerHTML = "";
+                    for(let i = 0; i < data.papers.length; i++){
+                        var opt = document.createElement('option');
+                        opt.value = i;
+                        opt.innerHTML = data.papers[i]['title'];
+                        
+                        select.appendChild(opt);
+                    }
+
+                } else {
+                    alert("Paper fetching failed: " + data.error);
                 }
             })
             .catch(error => {
